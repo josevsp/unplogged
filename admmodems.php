@@ -3,8 +3,6 @@
 
 include '../lib/conn.php';
 
-
-ahodaajshjahsjajhasjashj
 $usuario = $_SESSION['login'];
 
 $ABSPATH = dirname(__FILE__).'/';
