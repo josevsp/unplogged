@@ -126,7 +126,6 @@ if(isset($_SESSION['respSess'])){
 
 
 	$tabla = cargaTablaModems();
-	echo $tabla;
 	
 	foreach($tabla as $campo => $valores){
 		$elementos = count($valores) - 1;
