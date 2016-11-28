@@ -126,17 +126,17 @@ if(isset($_SESSION['respSess'])){
 
 
 	$tabla = cargaTablaModems();
-	
+	echo $tabla;
 	
 	foreach($tabla as $campo => $valores){
 		$elementos = count($valores) - 1;
 	}
 	
-	$tablaFinal = "";
+	$tablaFinal = '';
 	
 	$body = '';
 	
-	
+
 	for($i = 0; $i <= $elementos; $i++){
 		$checks = '<td><input id="cb[]" name="cb[]" type="checkbox" value="[id]"/>';
 		$body = $body.'<tr class="color[c]">';
@@ -192,8 +192,6 @@ if(isset($_SESSION['respSess'])){
 	<th ><strong>Plan<br/>
     <select name="planOperadora" id="planOperadora" onChange="doSearch()" >
 		<option value= "" <?=($planOperadora=='' ? "selected":"")?>>Todos</option>
-		<option value = "Sin Plan Digitel">Sin Plan Digitel</option>
-		<option value = "SMS Ilimitado">SMS Ilimitado</option>
 		<?
 			$cont = 0;
 			$arr_length = count($operadorasList);
