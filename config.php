@@ -51,6 +51,8 @@ class config{
 	public static function tablaTransformaciones(){
 		return array(	'Estado del Modem' =>	array(	0 => 'Inactivo', 
 														1 => 'Activo', 
+														2 => 'Desactivado',
+														3 => 'Recargar',
 														100 => 'Desconocido'),
 						
 						
