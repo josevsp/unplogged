@@ -9,11 +9,16 @@ $ABSPATH = dirname(__FILE__).'/';
 include_once($ABSPATH.'adminmodems/cargainicialm.php');
 
 $planOperadora="";
+$estatusModems= "";
 if(isset($_SESSION['login'])){
 	
+	if($_POST["estatusModems"] != null){
+		$estatusModems= $_POST["estatusModems"];
+	}
 	if($_POST["planOperadora"] != null){
 		$planOperadora= $_POST["planOperadora"];	
 	}
+
 	
 	//Lista de Planes asignados
 	$operadorasList = array(); 
@@ -54,17 +59,21 @@ function selectall(formName){
 
 <script>
 	var tabla = 'tabla';
+	var filtro1 = 'estatusModems';
 	var filtro2 = 'planOperadora';
+	var columFil1 = 4;
 	var columFil2 = 5;
 	function doSearch()
 	{
 			var tableReg = document.getElementById(tabla);
+			var searchText1 = document.getElementById(filtro1).value.toLowerCase();
 			var searchText2 = document.getElementById(filtro2).value.toLowerCase();
 			var cellsOfRow="";
 			var found=false;
+			var compareWith="";
  			var compareWith2="";
 			var posLoc;
-			var locationM="";
+			var statusM="";
  			
 			// Recorremos todas las filas con contenido de la tabla
 			for (var i = 1; i < tableReg.rows.length; i++)
@@ -74,10 +83,20 @@ function selectall(formName){
 				// Recorremos todas las celdas
 				if(!found)
 				{	
-					 var value; 
-				
-					compareWith2 = cellsOfRow[columFil2].innerHTML.toLowerCase();							
-					if (compareWith2.indexOf(searchText2) > -1)
+			
+					compareWith = cellsOfRow[columFil1].innerHTML.toLowerCase();
+					compareWith2 = cellsOfRow[columFil2].innerHTML.toLowerCase();
+/*
+					if(compareWith.indexOf("Inactivo") > -1)
+						statusM = "Inactivo";
+					else if(compareWith.indexOf("Activo") > -1)
+					 	statusM = "Activo";
+					else if(compareWith.indexOf("Desactivado") > -1)
+					 	statusM = "Desactivado";			
+					else if(compareWith.indexOf("Recargar") > -1)
+						statusM = "Recargar";
+					*/
+					if ((compareWith.indexOf(searchText1) > -1) && (compareWith2.indexOf(searchText2) > -1))
 					{
 						found = true;
 					}
@@ -188,6 +207,14 @@ if(isset($_SESSION['respSess'])){
 	<th ><strong>Ubicaci&oacute;n<br/>
 	<th ><strong>Estado Script<br/>
 	<th ><strong>Estado Modem<br/>
+		<select name="estatusModems" id="estatusModems" onChange="doSearch()" >
+			<option value=""  <?=($estatusModems=='' ?"selected":"")?>>Todos</option>
+			<option value="1" <?=($estatusModems=='1' ?"selected":"")?>>Activo</option>
+			<option value = "0" <?=($estatusModems=='0' ?"selected":"")?>>Inactivo</option>
+			<option value="2" <?=($estatusModems== '2' ?"selected":"")?>>Desactivado</option>
+			<option value="3" <?=($estatusModems== '3' ?"selected":"")?>>Recargar</option>
+		</select>
+	</th>
 	<th ><strong>Plan<br/>
     <select name="planOperadora" id="planOperadora" onChange="doSearch()" >
 		<option value= "" <?=($planOperadora=='' ? "selected":"")?>>Todos</option>
