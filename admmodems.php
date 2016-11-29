@@ -75,7 +75,7 @@ function selectall(formName){
 			var posLoc;
 			var statusM="";
  			
-			// Recorremos todas las filas con contenido de la tabla
+			//tranformo los datos que me da el filtro
 			switch(searchText1)
 			{
 				case "0":
@@ -90,8 +90,9 @@ function selectall(formName){
 				case "3":
 					statusM = "recargar";	
 				default:
+					statusM = "";
 			}
-			
+			// Recorremos todas las filas con contenido de la tabla
 			for (var i = 1; i < tableReg.rows.length; i++)
 			{
 				cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
