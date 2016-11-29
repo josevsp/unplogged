@@ -36,12 +36,14 @@ class config{
 	//const nombreScriptModems = 'modem.php';
 	const nombreScriptModems = 'modem.php|modemMovilnet.php';
 /*	
+	// conexion a bd en producion
 	const idBdHost = 100;
 	const bdUser='root';
 	const bdPass='MyUnplugged2008';
 	const bdName='modems_mt';
 	
 */
+	// conexion a bd en servidor de desarrollo
 	const idBdHost = 100;
 	const bdUser='root';
 	const bdPass='BDDesarrollo2008';
