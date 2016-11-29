@@ -42,7 +42,7 @@ class config{
 	const bdName='modems_mt';
 	
 */
-	const idBdHost = 4;
+	const idBdHost = 100;
 	const bdUser='root';
 	const bdPass='BDDesarrollo2008';
 	const bdName='modems_mt';
