@@ -76,6 +76,22 @@ function selectall(formName){
 			var statusM="";
  			
 			// Recorremos todas las filas con contenido de la tabla
+			switch(searchText1)
+			{
+				case "0":
+					statusM = "inactivo";
+					break;
+				case "1":
+					statusM = "activo";
+					break;
+				case "2":
+					statusM = "desactivado";
+					break;
+				case "3":
+					statusM = "recargar";	
+				default:
+			}
+			
 			for (var i = 1; i < tableReg.rows.length; i++)
 			{
 				cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
@@ -86,17 +102,9 @@ function selectall(formName){
 			
 					compareWith = cellsOfRow[columFil1].innerHTML.toLowerCase();
 					compareWith2 = cellsOfRow[columFil2].innerHTML.toLowerCase();
-/*
-					if(compareWith.indexOf("Inactivo") > -1)
-						statusM = "Inactivo";
-					else if(compareWith.indexOf("Activo") > -1)
-					 	statusM = "Activo";
-					else if(compareWith.indexOf("Desactivado") > -1)
-					 	statusM = "Desactivado";			
-					else if(compareWith.indexOf("Recargar") > -1)
-						statusM = "Recargar";
-					*/
-					if ((compareWith.indexOf(searchText1) > -1) && (compareWith2.indexOf(searchText2) > -1))
+				
+			
+					if ((compareWith.indexOf(statusM) > -1) && (compareWith2.indexOf(searchText2) > -1))
 					{
 						found = true;
 					}
