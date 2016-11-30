@@ -7,6 +7,7 @@ $estatusModems= "";
 $planOperadora="";
 $tiemInac="";
 $valor=true;
+
 if(isset($_SESSION['login'])){ 
 	$ttotal=0;
 	$modemsactivos=0;
@@ -481,6 +482,7 @@ function montoSaldo() {
     </strong>Sel 'A': <a href="javascript:marcarRadio(8);" title="seleccionar todos"><strong>8</strong></a>,<strong> </strong><a href="javascript:marcarRadio(16);" title="seleccionar todos"><strong>16</strong></a>, <a href="javascript:marcarRadio(24);" title="seleccionar todos"><strong> 24</strong></a>,  <a href="javascript:marcarRadio(todos());" title="seleccionar todos"><strong>all</strong></a></th>
     <th >Comentario</th>
     <th ><strong>Saldo BD</strong></th>
+    <th ><strong>N# Mensajes</strong></th>
     <th >Plan<br/>
     <select name="planOperadora" id="planOperadora" onChange="doSearch()" >
      <option value= "" <?=($planOperadora=='' ? "selected":"")?>>Todos</option>
@@ -506,8 +508,10 @@ function montoSaldo() {
     </strong><a href="javascript:marcar(8);" title="seleccionar todos"><strong>8</strong></a>, <a href="javascript:marcar(16);" title="seleccionar todos"><strong>16</strong></a>, <a href="javascript:marcar(24);" title="seleccionar todos"><strong>24</strong></a>, <a href="javascript:marcar(todos());" title="seleccionar todos"><strong>all</strong></a></th>
   
     <th ><strong>Respuesta modem</strong></th>
-    <th >Saldo Modem</th>
+    <!--th >Saldo Modem</th-->
   </tr>
+
+
 <?
 $sql = "SELECT Modem, Location, ModemTypeID, ModemID, Active, Money, PrepaidPlanID, (SELECT PlanName FROM PrepaidPlans WHERE PrepaidPlans.PrepaidPlanID = ModemStatus.PrepaidPlanID) AS PrepaidPlans, MobileNumber, BillingDate, ExpirationDate, Comments, IP, (SELECT COUNT(*) FROM RejectedMessages WHERE OutDate > '".date("Y-m-d")." 00:00:00' AND RejectedMessages.DispatchedBy = ModemStatus.ModemID) AS MR FROM ModemStatus  ORDER BY ModemID ";
 $query = mysql_query($sql,$conn);
@@ -627,12 +631,20 @@ while($row = mysql_fetch_array($query)){
 	 R:<input type="radio" name="activo<?=$row["ModemID"]?>" id="radio" value="3" <?=($row["Active"]==3?'checked="checked"':'')?> <?=$disable?> />
 	
 </td>
-<? //$disable = ($row["PrepaidPlanID"]==2?'disabled="disabled"':'');
+<? 
 	$disable = ($row["PrepaidPlanID"]==2?'readonly="readonly"':'');
 ?>
-<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60" <?=$disable?>/> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<" <?=$disable?> /></td>
-      <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6" <?=$disable?>/></td>
+	<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60" <?=$disable?>/> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<" <?=$disable?> /></td>
+     <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6" <?=$disable?>/></td>
+	 
+	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="" size="6"<?=$disable?>/></td>
+ 
+      
       <td><?=$row["PrepaidPlans"]?></td>
+
+
+
+
         <!--<td><?=$row["BillingDate"]?></td>
         <td><?=$row["ExpirationDate"]?></td>-->
         <td><table border = "10"><tr><? $modem = $row["ModemID"];
@@ -681,7 +693,7 @@ while($row = mysql_fetch_array($query)){
 	<?=$disableCheck=''?>
         <!--<td><?=$row["MR"]?></td>-->
       <td><?=(in_array($row["ModemID"],$_POST['sel'])?$estado.$saldo.$reiniciar:"")?></td>
-      <td><input name="copiaSaldo<?=$row["ModemID"]?>" type="button" id="copiaSaldo<?=$row["ModemID"]?>" onClick="copiaValor('saldo<?=$row["ModemID"]?>','saldoMod<?=$row["ModemID"]?>')" value="<--" <?=$disable?> /><input name="saldoMod<?=$row["ModemID"]?>" type="text" disabled id="saldoMod<?=$row["ModemID"]?>" value = "" size="6" <?=$disable?>/></td>
+      <!-- td><input name="copiaSaldo<?=$row["ModemID"]?>" type="button" id="copiaSaldo<?=$row["ModemID"]?>" onClick="copiaValor('saldo<?=$row["ModemID"]?>','saldoMod<?=$row["ModemID"]?>')" value="<--" <?=$disable?> /><input name="saldoMod<?=$row["ModemID"]?>" type="text" disabled id="saldoMod<?=$row["ModemID"]?>" value = "" size="6" <?=$disable?>/></td-->
   	</tr>
     <?
 }
