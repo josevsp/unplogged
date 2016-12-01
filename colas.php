@@ -50,7 +50,7 @@ if(isset($_POST["Guardar"])){
 	$sql = "SELECT ModemID FROM ModemStatus ";
 	$query = mysql_query($sql,$conn);
 	while($row = mysql_fetch_array($query)){
-		$sql = "UPDATE ModemStatus SET MobileNumber = '".$_POST["numero".$row["ModemID"]]."', Money = ".$_POST["saldo".$row["ModemID"]].", Active = ".$_POST["activo".$row["ModemID"]].", Comments = '".$_POST["comentario".$row["ModemID"]]."' WHERE ModemID = ".$row["ModemID"]." ";
+		$sql = "UPDATE ModemStatus SET MobileNumber = '".$_POST["numero".$row["ModemID"]]."', Money = ".$_POST["saldo".$row["ModemID"]].", Active = ".$_POST["activo".$row["ModemID"]].", Comments = '".$_POST["comentario".$row["ModemID"]]."', Mensajes = ".$_POST["mensajes".$row["ModemID"]]." WHERE ModemID = ".$row["ModemID"]." ";
 		$query2 = mysql_query($sql,$conn);
 	}
 }
@@ -515,7 +515,7 @@ function montoSaldo() {
 
 
 <?
-$sql = "SELECT Modem, Location, ModemTypeID, ModemID, Active, Money, PrepaidPlanID, (SELECT PlanName FROM PrepaidPlans WHERE PrepaidPlans.PrepaidPlanID = ModemStatus.PrepaidPlanID) AS PrepaidPlans, MobileNumber, BillingDate, ExpirationDate, Comments, IP, (SELECT COUNT(*) FROM RejectedMessages WHERE OutDate > '".date("Y-m-d")." 00:00:00' AND RejectedMessages.DispatchedBy = ModemStatus.ModemID) AS MR FROM ModemStatus  ORDER BY ModemID ";
+$sql = "SELECT Modem, Location, ModemTypeID, ModemID, Active, Money, Mensajes, PrepaidPlanID, (SELECT PlanName FROM PrepaidPlans WHERE PrepaidPlans.PrepaidPlanID = ModemStatus.PrepaidPlanID) AS PrepaidPlans, MobileNumber, BillingDate, ExpirationDate, Comments, IP, (SELECT COUNT(*) FROM RejectedMessages WHERE OutDate > '".date("Y-m-d")." 00:00:00' AND RejectedMessages.DispatchedBy = ModemStatus.ModemID) AS MR FROM ModemStatus  ORDER BY ModemID ";
 $query = mysql_query($sql,$conn);
 while($row = mysql_fetch_array($query)){
 	if(in_array($row["ModemID"],$_POST['sel'])){
@@ -639,7 +639,7 @@ while($row = mysql_fetch_array($query)){
 	<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60" <?=$disable?>/> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<" <?=$disable?> /></td>
      <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6" <?=$disable?>/></td>
 	 
-	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="" size="6"<?=$disable?>/></td>
+	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="<?=$row["Mensajes"]?>" size="6"<?=$disable?>/></td>
  
       
       <td><?=$row["PrepaidPlans"]?></td>
