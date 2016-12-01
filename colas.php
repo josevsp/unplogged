@@ -67,13 +67,13 @@ if(isset($_POST["Guardar"])){
 	var filtro3 = 'tiemInac';
 	var filtro4 = 'locationModem';
 	var columFil1 = 1;
-	var columFil2 = 4;
-	var columFil3 = 6;
+	var columFil2 = 5;
+	var columFil3 = 7;
 	var columFil4 = 0;
-	var columSel = 7;
+	var columSel = 8;
 	var columRadio = 1;
-	var columResulModems = 8;
-	var columSalModen = 9;
+	var columResulModems = 9;
+	//var columSalModen = 9;
 	var columSalDB=3;
 	
 	//var check = true;
@@ -95,7 +95,7 @@ if(isset($_POST["Guardar"])){
  			
  			
 			desmarcarTodos();
-			montoSaldo();
+			//montoSaldo();
 			// Recorremos todas las filas con contenido de la tabla
 			for (var i = 1; i < tableReg.rows.length; i++)
 			{
@@ -290,7 +290,7 @@ function copiaValor(nombreElementoDesT,nombreElementoOri){
 	elemento.value=elemento2.value;
 }
 
-	
+	/*
 function montoSaldo() {
 		
 		var tableReg= document.getElementById(tabla);
@@ -322,6 +322,8 @@ function montoSaldo() {
 				     
       
     }
+    */
+
 	</script>
     
      <style>
