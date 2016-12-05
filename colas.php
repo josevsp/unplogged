@@ -35,14 +35,14 @@ if(isset($_SESSION['login'])){
     $modemsactivos = $row['ModemActivos'];
 	
 	//Lista de Planes asignados
-	 	 $operadorasList = array(); 
-       	$sql = "SELECT  b.PlanName as PlanName FROM `ModemStatus` as a,  `PrepaidPlans` as  b  WHERE a.`PrepaidPlanID`= b.`PrepaidPlanID` group by b.PlanName";
-		$query = mysql_query($sql,$conn);
-        $cont = 0;
-        while($row = mysql_fetch_array($query)){
-                $operadorasList["$cont"] = $row["PlanName"];
-                $cont = $cont + 1;
-        }
+	$operadorasList = array(); 
+    $sql = "SELECT  b.PlanName as PlanName FROM `ModemStatus` as a,  `PrepaidPlans` as  b  WHERE a.`PrepaidPlanID`= b.`PrepaidPlanID` group by b.PlanName";
+	$query = mysql_query($sql,$conn);
+    $cont = 0;
+    while($row = mysql_fetch_array($query)){
+        $operadorasList["$cont"] = $row["PlanName"];
+        $cont = $cont + 1;
+    }
 		
 	
 
@@ -50,7 +50,7 @@ if(isset($_POST["Guardar"])){
 	$sql = "SELECT ModemID FROM ModemStatus ";
 	$query = mysql_query($sql,$conn);
 	while($row = mysql_fetch_array($query)){
-		$sql = "UPDATE ModemStatus SET MobileNumber = '".$_POST["numero".$row["ModemID"]]."', Money = ".$_POST["saldo".$row["ModemID"]].", Active = ".$_POST["activo".$row["ModemID"]].", Comments = '".$_POST["comentario".$row["ModemID"]]."', Mensajes = ".$_POST["mensajes".$row["ModemID"]]." WHERE ModemID = ".$row["ModemID"]." ";
+		$sql = "UPDATE ModemStatus SET MobileNumber = '".$_POST["numero".$row["ModemID"]]."', Money = ".$_POST["saldo".$row["ModemID"]].", Active = ".$_POST["activo".$row["ModemID"]].", Comments = '".$_POST["comentario".$row["ModemID"]]."', Numero = ".$_POST["mensajes".$row["ModemID"]]." WHERE ModemID = ".$row["ModemID"]." ";
 		$query2 = mysql_query($sql,$conn);
 	}
 }
@@ -61,6 +61,7 @@ if(isset($_POST["Guardar"])){
 <title>Despachadores Desarrollo</title>
 
 <script language="javascript">
+
 	var tabla = 'modens';
 	var filtro1 = 'estatusModems';
 	var filtro2 = 'planOperadora';
@@ -77,8 +78,8 @@ if(isset($_POST["Guardar"])){
 	var columSalDB=3;
 	
 	//var check = true;
-		function doSearch()
-		{
+	function doSearch()
+	{
 			var tableReg = document.getElementById(tabla);
 			var searchText = document.getElementById(filtro1).value.toLowerCase();
 			var searchText2 = document.getElementById(filtro2).value.toLowerCase();
@@ -163,18 +164,62 @@ if(isset($_POST["Guardar"])){
 					tableReg.rows[i].style.display = 'none';
 				}
 			}
-		}
+	}
 		
+function existe(value){
+			try{
+
+				var vacio = true;
+				
+				if(value!=undefined && !(value === undefined) && 
+						value!=null && 
+						value!='null' &&
+						value!='undefined'){
+					try{
+						if(value instanceof Array){
+							if(value.length>0){
+								return true;
+							}
+							if(value.length==0){
+								return false;
+							}
+						}
+					}catch (e) {
+						// TODO: handle exception
+					}
+					
+					if(		value instanceof String ||
+							value instanceof HTMLFormElement || 
+							value instanceof HTMLInputElement ){
+
+						try{
+							vacio = value.isEmpty();
+						} catch (exx){
+							vacio = false;
+						}
+						
+					}else{
+						vacio = false;	
+					}
+
+
+				}
+				return !vacio;
+			}catch(e){
+				//alert(e);
+				return false;
+			}
+		}
+
 		function marcar(cantidad)
 		{
 			var tableReg = document.getElementById(tabla);
 			var estatus= '';
 			var compareWith="";
-			var compareWith="";
 			var check = true;
 			var j =0;
 			if(cantidad == contarChecked() ){
-			check = false;
+				check = false;
 			}
 			desmarcarTodos();
 			// Recorremos todas las filas con contenido de la tabla
@@ -186,13 +231,20 @@ if(isset($_POST["Guardar"])){
 			
 				if(tableReg.rows[i].style.display == estatus ){
 					var nombre = cellsOfRow[1].innerHTML.toLowerCase();
+					
+					if (existe(compareWith[0]) && existe(compareWith[0].type)){
 						 if(compareWith[0].type == "checkbox")
-				 			 compareWith[0].checked=check; 
-					j++;
+				 			 compareWith[0].checked=check;
+
+						 j++;
 					}
-					}
-					check = true;
+					//console.log("indice i=" + i);
+					//console.log("indice j=" + j);
+					//j++;
+				}
 			}
+			check = true;
+		}
 	
 	function marcarRadio(cantidad)
 		{
@@ -213,7 +265,7 @@ if(isset($_POST["Guardar"])){
 				if(tableReg.rows[i].style.display == estatus ){
 					var nombre = cellsOfRow[1].innerHTML.toLowerCase();
 					for (var k = 0; k < compareWith.length; k++) {
-						 if(compareWith[k].type == "radio" && compareWith[k].value == 1){
+						 if(existe(compareWith[k].type) && compareWith[k].type == "radio" && compareWith[k].value == 1){
 				 			 compareWith[k].checked=check;
 							 break; 
 							}
@@ -236,7 +288,7 @@ if(isset($_POST["Guardar"])){
 				compareWith = cellsOfRow[columSel].getElementsByTagName('input');
 				
 			for (var k = 0; k < compareWith.length; k++) {
-			 if(compareWith[k].type == "checkbox")
+			 if(existe(compareWith[k].type) && compareWith[k].type == "checkbox")
 				  compareWith[k].checked=false; 
 			}
 			}
@@ -268,9 +320,10 @@ function contarChecked()
 				compareWith = cellsOfRow[columSel].getElementsByTagName('input');
 				
 			for (var k = 0; k < compareWith.length; k++) {
-			 if(compareWith[k].type == "checkbox")
+			 if(existe(compareWith[k]) && existe(compareWith[k].type) && compareWith[k].type == "checkbox"){
 				  if(compareWith[k].checked==true) 
 				  contar++; 
+			 }
 			}
 			
 			}
@@ -290,8 +343,53 @@ function copiaValor(nombreElementoDesT,nombreElementoOri){
 	elemento.value=elemento2.value;
 }
 
+
+	function actualizarCampos() {
+	  let out = '';
+	  let sms = '';
+	  let saldo = '';
+	  let error_sms = '';
+	  let error_saldo = '';
+	  let fila_saldo = 3;
+	  let fila_mensajes = 4;
+	  let fila_repuesta = 9;
+	  let fila_coment = 2;
+	  let modens = document.getElementById('modens').tBodies[0].children;
+	  let size = document.getElementById('modens').tBodies[0].childElementCount;
+	  for (let i = 1; i < size; i++) {
+	    if (modens[i].children[fila_repuesta].innerText !== '') {
+
+	      saldo = modens[i].children[fila_repuesta].innerText.match(/Saldo Bs. \d+,\d+/gm);
+	      if (saldo === null) {
+	        error_saldo = "FALLO SALDO";
+	        saldo = modens[i].children[fila_saldo].firstChild.value;
+	        sms = modens[i].children[fila_mensajes].firstChild.value;
+	      } 
+	      else{
+	        saldo = saldo[0].slice(10).replace(',', '.');
+
+	        sms = modens[i].children[fila_repuesta].innerText.match(/SMS: \d+/);
+	        if (sms === null) {
+	          error_sms = "FALLO SMS";
+	          sms = 0;
+	        } 
+	        else 
+	        {
+	            sms = sms[0].slice(5);
+	        }
+	     }
+	      out += saldo + '\t' + sms + '\n';
+	      modens[i].children[fila_saldo].firstChild.value = saldo;
+	      modens[i].children[fila_mensajes].firstChild.value = sms;
+	      modens[i].children[fila_coment].firstChild.value = error_saldo + error_sms;
+	    }
+	    error_saldo = '';
+	    error_sms = '';
+	  }
+	}
+
 	/*
-function montoSaldo() {
+	function montoSaldo() {
 		
 		var tableReg= document.getElementById(tabla);
 		 var regex = /Saldo B[sS]+[fF]?\. \d+([,.]?\d*)/gm; 
@@ -324,9 +422,9 @@ function montoSaldo() {
     }
     */
 
-	</script>
+</script>
     
-     <style>
+<style>
 .menu
 {	
 	float: left;
@@ -514,16 +612,16 @@ function montoSaldo() {
   </tr>
 
 
-<?
-$sql = "SELECT Modem, Location, ModemTypeID, ModemID, Active, Money, Mensajes, PrepaidPlanID, (SELECT PlanName FROM PrepaidPlans WHERE PrepaidPlans.PrepaidPlanID = ModemStatus.PrepaidPlanID) AS PrepaidPlans, MobileNumber, BillingDate, ExpirationDate, Comments, IP, (SELECT COUNT(*) FROM RejectedMessages WHERE OutDate > '".date("Y-m-d")." 00:00:00' AND RejectedMessages.DispatchedBy = ModemStatus.ModemID) AS MR FROM ModemStatus  ORDER BY ModemID ";
+<? // en el campo Numero se guardaran las cantidades de mensajes disponibles al efectuar las consultas.
+$sql = "SELECT Modem, Location, ModemTypeID, ModemID, Active, Money, Numero, PrepaidPlanID, (SELECT PlanName FROM PrepaidPlans WHERE PrepaidPlans.PrepaidPlanID = ModemStatus.PrepaidPlanID) AS PrepaidPlans, MobileNumber, BillingDate, ExpirationDate, Comments, IP, (SELECT COUNT(*) FROM RejectedMessages WHERE OutDate > '".date("Y-m-d")." 00:00:00' AND RejectedMessages.DispatchedBy = ModemStatus.ModemID) AS MR FROM ModemStatus  ORDER BY ModemID ";
 $query = mysql_query($sql,$conn);
 while($row = mysql_fetch_array($query)){
 	if(in_array($row["ModemID"],$_POST['sel'])){
 
-                $modem = $row["Modem"];
-                $modemid = $row["ModemID"];
+            $modem = $row["Modem"];
+            $modemid = $row["ModemID"];
 
-                switch ($_POST['comandos']){
+            switch ($_POST['comandos']){
 			case 1:
                         $ip = $row["IP"];
                         if($fp = fsockopen($ip,$modem,$errno,$errstr,15)){
@@ -538,6 +636,7 @@ while($row = mysql_fetch_array($query)){
                                 }
                                 fclose($fp);
 	                }
+
                         break;
                
 			case 2:
@@ -616,7 +715,9 @@ while($row = mysql_fetch_array($query)){
 
  //  ******************************************************************
         }
+
 	?>
+
     <tr class="<?='color'.$row["Active"];?>">
         <td>
 	<?=$row["ModemID"].$row["Location"];
@@ -639,7 +740,7 @@ while($row = mysql_fetch_array($query)){
 	<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60" <?=$disable?>/> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<" <?=$disable?> /></td>
      <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6" <?=$disable?>/></td>
 	 
-	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="<?=$row["Mensajes"]?>" size="6"<?=$disable?>/></td>
+	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="<?=$row["Numero"]?>" size="6"<?=$disable?>/></td>
  
       
       <td><?=$row["PrepaidPlans"]?></td>
@@ -698,6 +799,16 @@ while($row = mysql_fetch_array($query)){
       <!-- td><input name="copiaSaldo<?=$row["ModemID"]?>" type="button" id="copiaSaldo<?=$row["ModemID"]?>" onClick="copiaValor('saldo<?=$row["ModemID"]?>','saldoMod<?=$row["ModemID"]?>')" value="<--" <?=$disable?> /><input name="saldoMod<?=$row["ModemID"]?>" type="text" disabled id="saldoMod<?=$row["ModemID"]?>" value = "" size="6" <?=$disable?>/></td-->
   	</tr>
     <?
+}
+
+if($_POST["comandos"] == 1)
+{
+?>
+
+	<script>
+		actualizarCampos();
+	</script>
+<? 
 }
 ?>
 </table>
