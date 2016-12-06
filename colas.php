@@ -354,6 +354,7 @@ function copiaValor(nombreElementoDesT,nombreElementoOri){
 	  let fila_mensajes = 4;
 	  let fila_repuesta = 9;
 	  let fila_coment = 2;
+	  let fila_plan = 5;
 	  let modens = document.getElementById('modens').tBodies[0].children;
 	  let size = document.getElementById('modens').tBodies[0].childElementCount;
 	  for (let i = 1; i < size; i++) {
@@ -370,8 +371,12 @@ function copiaValor(nombreElementoDesT,nombreElementoOri){
 
 	        sms = modens[i].children[fila_repuesta].innerText.match(/SMS: \d+/);
 	        if (sms === null) {
-	          error_sms = "FALLO SMS";
-	          sms = 0;
+
+	            if(modens[i].children[fila_plan].innerText !== 'SMS Ilimitado')
+          		{
+            		error_sms = "FALLO SMS";
+          		}
+	          	sms = 0;
 	        } 
 	        else 
 	        {
