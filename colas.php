@@ -333,6 +333,7 @@ function contarChecked()
 function limpiar(nombreElemento){
 	var elemento = document.getElementById(nombreElemento);
 	elemento.value="";
+	elemento.focus();
 }
 
 function copiaValor(nombreElementoDesT,nombreElementoOri){
@@ -739,15 +740,12 @@ while($row = mysql_fetch_array($query)){
 	 R:<input type="radio" name="activo<?=$row["ModemID"]?>" id="radio" value="3" <?=($row["Active"]==3?'checked="checked"':'')?> <?=$disable?> />
 	
 </td>
-<? 
-	$disable = ($row["PrepaidPlanID"]==2?'readonly="readonly"':'');
-?>
-	<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60" <?=$disable?>/> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<" <?=$disable?> /></td>
-     <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6" <?=$disable?>/></td>
+
+	<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60"/> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<"/></td>
+     <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6"/></td>
 	 
-	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="<?=$row["Numero"]?>" size="6"<?=$disable?>/></td>
+	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="<?=$row["Numero"]?>" size="6"/></td>
  
-      
       <td><?=$row["PrepaidPlans"]?></td>
 
 

@@ -88,7 +88,8 @@ function selectall(formName){
 					statusM = "desactivado";
 					break;
 				case "3":
-					statusM = "recargar";	
+					statusM = "recargar";
+					break;
 				default:
 					statusM = "";
 			}
@@ -105,7 +106,7 @@ function selectall(formName){
 					compareWith2 = cellsOfRow[columFil2].innerHTML.toLowerCase();
 				
 			
-					if ((compareWith.indexOf(statusM) > -1) && (compareWith2.indexOf(searchText2) > -1))
+					if ((statusM.indexOf(compareWith)== 0 || statusM == "") && (compareWith2.indexOf(searchText2) == 0 || searchText2 == ""))
 					{
 						found = true;
 					}
@@ -211,20 +212,20 @@ if(isset($_SESSION['respSess'])){
 
 <table name="tabla" id="tabla" border="1" align="center" cellpadding="1" cellspacing="0">
 <tr>
-	<th ><strong>Id modem<br/>
-	<th ><strong>COM<br/>
-	<th ><strong>Ubicaci&oacute;n<br/>
-	<th ><strong>Estado Script<br/>
-	<th ><strong>Estado Modem<br/>
+	<th ><strong>Id modem<br/></strong></th>
+	<th ><strong>COM<br/></strong></th>
+	<th ><strong>Ubicaci&oacute;n<br/></strong></th>
+	<th ><strong>Estado Script<br/></strong></th>
+	<th ><strong>Estado Modem<br/></strong>
 		<select name="estatusModems" id="estatusModems" onChange="doSearch()" >
 			<option value=""  <?=($estatusModems=='' ?"selected":"")?>>Todos</option>
+			<option value ="0" <?=($estatusModems=='0' ?"selected":"")?>>Inactivo</option>
 			<option value="1" <?=($estatusModems=='1' ?"selected":"")?>>Activo</option>
-			<option value = "0" <?=($estatusModems=='0' ?"selected":"")?>>Inactivo</option>
 			<option value="2" <?=($estatusModems== '2' ?"selected":"")?>>Desactivado</option>
 			<option value="3" <?=($estatusModems== '3' ?"selected":"")?>>Recargar</option>
 		</select>
 	</th>
-	<th ><strong>Plan<br/>
+	<th><strong>Plan<br/></strong>
     <select name="planOperadora" id="planOperadora" onChange="doSearch()" >
 		<option value= "" <?=($planOperadora=='' ? "selected":"")?>>Todos</option>
 		<?
@@ -240,10 +241,10 @@ if(isset($_SESSION['respSess'])){
      <? } ?>
 	 
    </select>
-	<th ><strong>Comentario<br/>
-	<th ><strong>Id Operadora<br/>
-	<th ><strong>Check<br/>
-	<th ><strong>Respuesta<br/>
+	<th ><strong>Comentario<br/></strong></th>
+	<th ><strong>Id Operadora<br/></strong></th>
+	<th ><strong>Check<br/></strong></th>
+	<th ><strong>Respuesta<br/></strong></th>
 	
 </tr>
 

@@ -57,13 +57,6 @@ class config{
 														3 => 'Recargar',
 														100 => 'Desconocido'),
 						
-						
-						'Plan' => 				array(	1 => 'Sin Plan Digitel',
-														2 => 'SMS Ilimitado',
-														3 => 'Sin Plan Movistar',
-														4 => 'Escribe Pegado',
-														5 => 'Sin Plan Movilnet',
-														6 => 'Mensajes de texto ilimitados Movilnet'),
 														
 						'Ubicacion' => 			array(	'TE'=>'Torre Europa',
 														'GC'=>'Global Crossing',
@@ -80,7 +73,7 @@ class config{
 	const nombreEstadoScript = 'Estado del Script';
 	const nombreCampoIdModem = 'Id Modem';
 	//const queryTabla = "SELECT ModemID as 'Id Modem', SUBSTRING(Location, 5, 5) as 'COM', SUBSTRING(Location, 1, 2) as 'Ubicacion', Active as 'Estado del Modem', Comments as 'Comentario' FROM ModemStatus ORDER BY  `ModemStatus`.`ModemID` ASC";
-	const queryTabla = "SELECT ModemID as 'Id Modem', SUBSTRING(Location, 5, 5) as 'COM', SUBSTRING(Location, 1, 2) as 'Ubicacion', Active as 'Estado del Modem', PrepaidPlanID as 'Plan', Comments as 'Comentario', OperatorID as 'Id Operadora' FROM ModemStatus ORDER BY  ModemStatus.ModemID ASC";
+	const queryTabla = "SELECT m.ModemID as 'Id Modem', SUBSTRING(m.Location, 5, 5) as 'COM', SUBSTRING(m.Location, 1, 2) as 'Ubicacion', m.Active as 'Estado del Modem', p.PlanName as 'Plan', m.Comments as 'Comentario', m.OperatorID as 'Id Operadora' FROM ModemStatus m, PrepaidPlans p where m.PrepaidPlanID = p.PrepaidPlanID ORDER BY  m.ModemID ASC";
 	//const queryTabla = "SELECT ModemID as 'Id Modem', SUBSTRING(Location, 5, 5) as 'COM', SUBSTRING(Location, 1, 2) as 'Ubicacion', Active as 'Estado del Modem', Comments as 'Comentario', (SELECT Name FROM Operator WHERE Operator.OperatorID = ModemStatus.OperatorID) 'Nmb Operadora' FROM ModemStatus ORDER BY  `ModemStatus`.`ModemID` ASC";
 	
 	const idBotonModems = 'boton';
