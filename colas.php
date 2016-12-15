@@ -44,16 +44,25 @@ if(isset($_SESSION['login'])){
         $cont = $cont + 1;
     }
 		
-	
 
 if(isset($_POST["Guardar"])){
-	$sql = "SELECT ModemID FROM ModemStatus ";
+	if($_POST["estatusModems"] == '')
+	{
+		$sql = "SELECT ModemID FROM ModemStatus ";
+	}
+	else
+	{
+		$sql = "SELECT ModemID FROM ModemStatus WHERE Active = " . $_POST["estatusModems"] ." " ;
+	}
 	$query = mysql_query($sql,$conn);
 	while($row = mysql_fetch_array($query)){
-		$sql = "UPDATE ModemStatus SET MobileNumber = '".$_POST["numero".$row["ModemID"]]."', Money = ".$_POST["saldo".$row["ModemID"]].", Active = ".$_POST["activo".$row["ModemID"]].", Comments = '".$_POST["comentario".$row["ModemID"]]."', Numero = ".$_POST["mensajes".$row["ModemID"]]." WHERE ModemID = ".$row["ModemID"]." ";
+		$sql = "UPDATE ModemStatus SET Money = ".$_POST["saldo".$row["ModemID"]].", Active = ".$_POST["activo".$row["ModemID"]].", Comments = '".$_POST["comentario".$row["ModemID"]]."', Numero = '".$_POST["mensajes".$row["ModemID"]]."' WHERE ModemID = ".$row["ModemID"]." ";
 		$query2 = mysql_query($sql,$conn);
 	}
+
 }
+
+
 
 ?>
 <html>
@@ -725,14 +734,14 @@ while($row = mysql_fetch_array($query)){
 	?>
 
     <tr class="<?='color'.$row["Active"];?>">
-        <td>
+    <td>
 	<?=$row["ModemID"].$row["Location"];
 	//$disable = ($row["Active"]==2 || $row["PrepaidPlanID"]==3?'disabled="disabled"':'');
 	$disable = ($row["Active"]==2?'disabled="disabled"':'');
 	if($row["Active"]==1)
 		$disableCheck = "disabled=\"disabled\"";
 	?>
-</td>   
+	</td>   
      <td align="center">
      A:<input type="radio" name="activo<?=$row["ModemID"]?>" id="radio" value="1" <?=($row["Active"]==1?'checked="checked"':'')?> <?=$disable?> />
      I:<input type="radio" name="activo<?=$row["ModemID"]?>" id="radio" value="0" <?=($row["Active"]==0?'checked="checked"':'')?> <?=$disable?>/>
@@ -741,10 +750,10 @@ while($row = mysql_fetch_array($query)){
 	
 </td>
 
-	<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60"/> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<"/></td>
-     <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6"/></td>
+	<td><input name="comentario<?=$row["ModemID"]?>" type="text" id="comentario<?=$row["ModemID"]?>" value="<?=$row["Comments"]?>" size="15" maxlength="60" <?=$disable?> /> <input name="lipComentario<?=$row["ModemID"]?>" type="button" id="lipComentario<?=$row["ModemID"]?>" onClick="limpiar('comentario<?=$row["ModemID"]?>')" value="<<" <?=$disable?> /></td>
+     <td><input name="saldo<?=$row["ModemID"]?>" id="saldo<?=$row["ModemID"]?>" type="text" value="<?=$row["Money"]?>" size="6" <?=$disable?>/></td>
 	 
-	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="<?=$row["Numero"]?>" size="6"/></td>
+	<td><input name="mensajes<?=$row["ModemID"]?>" type="text" id="mensajes<?=$row["ModemID"]?>" value="<?=$row["Numero"]?>" size="6" <?=$disable?>/></td>
  
       <td><?=$row["PrepaidPlans"]?></td>
 
@@ -804,7 +813,7 @@ while($row = mysql_fetch_array($query)){
     <?
 }
 
-if($_POST["comandos"] == 1)
+if($_POST["comandos"] == 1 && isset($_POST["Estado"]))
 {
 ?>
 
